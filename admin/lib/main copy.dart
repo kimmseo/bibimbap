@@ -291,22 +291,12 @@ class _BusSelectionPage extends State<BusSelectionPage> {
                                       }),
                                 ]));
                   } else if (serviceEnabled == true) {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) => AlertDialog(
-                                title: Text('GPS'),
-                                content: Text('Your GPS is turned on!'),
-                                actions: <Widget>[
-                                  IconButton(
-                                      icon: Icon(Icons.check),
-                                      onPressed: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const TerminatePage()));
-                                      }),
-                                ]));
+                    print("sibal");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const TerminatePage()),
+                    );
                   }
                   ;
                 },
@@ -501,7 +491,7 @@ class _TerminatePage extends State<TerminatePage> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            const BusSelectionPage()),
+                                            const MyHomePage()),
                                   );
                                 }),
                             IconButton(

@@ -86,9 +86,11 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool match = false;
     return Scaffold(
         appBar: AppBar(
           title: Text('Enter Pin Code received from your company'),
+          automaticallyImplyLeading: false,
         ),
         body: Center(
             child: Column(
@@ -111,6 +113,23 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
               controller: textEditingController,
               onCompleted: (v) {
                 print("Completed");
+                if (v == "123456") {
+                  match = true;
+                } else {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                              title: Text('Pin Code'),
+                              content: Text(
+                                  'Wrong Pin Code. Please check your Pin Code'),
+                              actions: <Widget>[
+                                IconButton(
+                                    icon: Icon(Icons.check),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    }),
+                              ]));
+                }
               },
               onChanged: (value) {
                 print(value);
@@ -129,10 +148,11 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
               icon: const Icon(Icons.done),
               tooltip: 'Confirm entered PIN',
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const BusSelectionPage()));
+                if (match == true)
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const BusSelectionPage()));
               },
             ),
           ],
@@ -241,6 +261,7 @@ class _BusSelectionPage extends State<BusSelectionPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Admin Page: Bus Setting"),
+        automaticallyImplyLeading: false,
       ),
       body: Center(
         child: Column(

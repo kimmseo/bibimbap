@@ -95,37 +95,46 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
               title: Text('Material App Bar'),
             ),
             body: Center(
-                child: PinCodeTextField(
-              appContext: context,
-              length: 6,
-              obscureText: false,
-              animationType: AnimationType.fade,
-              pinTheme: PinTheme(
-                shape: PinCodeFieldShape.box,
-                borderRadius: BorderRadius.circular(5),
-                fieldHeight: 50,
-                fieldWidth: 40,
-                activeFillColor: Colors.white,
-              ),
-              animationDuration: Duration(milliseconds: 300),
-              backgroundColor: Colors.blue.shade50,
-              enableActiveFill: true,
-              controller: textEditingController,
-              onCompleted: (v) {
-                print("Completed");
-              },
-              onChanged: (value) {
-                print(value);
-                //setState(() {
-                //currentText = value;
-                //});
-              },
-              beforeTextPaste: (text) {
-                print("Allowing to paste $text");
-                //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
-                //but you can show anything you want here, like your pop up saying wrong paste format or etc
-                return true;
-              },
+                child: Column(
+              children: [
+                PinCodeTextField(
+                  appContext: context,
+                  length: 6,
+                  obscureText: false,
+                  animationType: AnimationType.fade,
+                  pinTheme: PinTheme(
+                    shape: PinCodeFieldShape.box,
+                    borderRadius: BorderRadius.circular(5),
+                    fieldHeight: 50,
+                    fieldWidth: 40,
+                    activeFillColor: Colors.white,
+                  ),
+                  animationDuration: Duration(milliseconds: 300),
+                  backgroundColor: Colors.blue.shade50,
+                  enableActiveFill: true,
+                  controller: textEditingController,
+                  onCompleted: (v) {
+                    print("Completed");
+                  },
+                  onChanged: (value) {
+                    print(value);
+                    //setState(() {
+                    //currentText = value;
+                    //});
+                  },
+                  beforeTextPaste: (text) {
+                    print("Allowing to paste $text");
+                    //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
+                    //but you can show anything you want here, like your pop up saying wrong paste format or etc
+                    return true;
+                  },
+                ),
+                IconButton(
+                  icon: const Icon(Icons.done),
+                  tooltip: 'Confirm entered PIN',
+                  onPressed: () {},
+                ),
+              ],
             ))));
   }
 }

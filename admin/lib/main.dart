@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:geolocator/geolocator.dart';
+import 'dart:core';
 
 void main() {
   runApp(const MyApp());
@@ -14,22 +15,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
+  const MyHomePage({Key? key}) : super(key: key);
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -46,7 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(''),
       ),
       body: Center(
         child: ElevatedButton.icon(
@@ -132,7 +128,12 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
                 IconButton(
                   icon: const Icon(Icons.done),
                   tooltip: 'Confirm entered PIN',
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const BusSelectipnPage()));
+                  },
                 ),
               ],
             ))));
@@ -175,3 +176,308 @@ Future<Position> _determinePosition() async {
   // continue accessing the position of the device.
   return await Geolocator.getCurrentPosition();
 }
+
+class BusSelectipnPage extends StatefulWidget {
+  const BusSelectipnPage({Key? key}) : super(key: key);
+
+  @override
+  _BusSelectipnPageState createState() => _BusSelectipnPageState();
+}
+
+class _BusSelectipnPageState extends State<BusSelectipnPage> {
+  // Initial Selected Value
+  String dropdownvalue = 'Red';
+
+  // List of items in our dropdown menu
+  var items = [
+    'Red',
+    'Red Express(Morning)',
+    'Red Express(Lunch)',
+    'Blue',
+    'Blue Express(Morning)',
+    'Blue Express(Lunch)',
+    'Green(Campus Rider)',
+    'Brown(Campus Weekend Rider)'
+  ];
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Admin Page: Bus Setting"),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            DropdownButton(
+              // Initial Value
+              value: dropdownvalue,
+
+              // Down Arrow Icon
+              icon: const Icon(Icons.keyboard_arrow_down),
+
+              // Array list of items
+              items: items.map((String items) {
+                return DropdownMenuItem(
+                  value: items,
+                  child: Text(items),
+                );
+              }).toList(),
+              // After selecting the desired option,it will
+              // change button value to selected value
+              onChanged: (String? newValue) {
+                setState(() {
+                  dropdownvalue = newValue!;
+                });
+              },
+            ),
+            FloatingActionButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                  Radius.circular(10),
+                )),
+                onPressed: () async {
+                  bool serviceEnabled =
+                      await Geolocator.isLocationServiceEnabled();
+                  if (serviceEnabled == false) {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                                title: Text('GPS'),
+                                content: Text(
+                                    'Are you sure your GPS is on?\nPlease turn on your GPS'),
+                                actions: <Widget>[
+                                  IconButton(
+                                      icon: Icon(Icons.check),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      }),
+                                ]));
+                  } else {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const TerminatePage()));
+                  }
+                },
+                child: const Text('Select'))
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class TerminatePage extends StatefulWidget {
+  const TerminatePage({Key? key}) : super(key: key);
+
+  @override
+  _TerminatePage createState() => _TerminatePage();
+}
+
+class _TerminatePage extends State<TerminatePage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Admin Page: Enter Terminate Location"),
+        automaticallyImplyLeading: false,
+      ),
+      body: Center(
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        SizedBox(
+          height: 50,
+          width: 100,
+          child: FloatingActionButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                Radius.circular(10),
+              )),
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                          title: Text('Saraca'),
+                          content: Text(
+                              'You have chose Saraca as your termination location'),
+                          actions: <Widget>[
+                            IconButton(
+                                icon: Icon(Icons.close),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                })
+                          ],
+                        ));
+                //HAVE TO ADD FUNCTION
+              },
+              child: const Text('SARACA')),
+        ),
+        Text(''),
+        SizedBox(
+          height: 50,
+          width: 100,
+          child: FloatingActionButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                Radius.circular(10),
+              )),
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                          title: Text('Hall 11'),
+                          content: Text(
+                              'You have chose Hall 11 as your termination location'),
+                          actions: <Widget>[
+                            IconButton(
+                                icon: Icon(Icons.close),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                })
+                          ],
+                        ));
+                //HAVE TO ADD FUNCTION
+              },
+              child: const Text('HALL 11')),
+        ),
+        Text(''),
+        SizedBox(
+          height: 50,
+          width: 100,
+          child: FloatingActionButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                Radius.circular(10),
+              )),
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                          title: Text('Hall 12/13'),
+                          content: Text(
+                              'You have chose Hall 12/13 as your termination location'),
+                          actions: <Widget>[
+                            IconButton(
+                                icon: Icon(Icons.close),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                })
+                          ],
+                        ));
+                //HAVE TO ADD FUNCTION
+              },
+              child: const Text('HALL 12/13')),
+        ),
+        Text(''),
+        SizedBox(
+          height: 50,
+          width: 100,
+          child: FloatingActionButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                Radius.circular(10),
+              )),
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                          title: Text('Hall 14/15'),
+                          content: Text(
+                              'You have chose Hall 14/15 as your termination location'),
+                          actions: <Widget>[
+                            IconButton(
+                                icon: Icon(Icons.close),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                })
+                          ],
+                        ));
+                //HAVE TO ADD FUNCTION
+              },
+              child: const Text('HALL 14/15')),
+        ),
+        Text(''),
+        SizedBox(
+          height: 50,
+          width: 100,
+          child: FloatingActionButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                Radius.circular(10),
+              )),
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                          title: Text('Hall 4/5'),
+                          content: Text(
+                              'You have chose Hall 4/5 as your termination location'),
+                          actions: <Widget>[
+                            IconButton(
+                                icon: Icon(Icons.close),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                })
+                          ],
+                        ));
+                //HAVE TO ADD FUNCTION
+              },
+              child: const Text('HALL 4/5')),
+        ),
+        Text(''),
+        Text(''),
+        Text(''),
+        SizedBox(
+          height: 100,
+          width: 200,
+          child: FloatingActionButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                Radius.circular(10),
+              )),
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                          title: Text('TERMINATE'),
+                          content:
+                              Text('Are you sure you would like to terminate?'),
+                          actions: <Widget>[
+                            IconButton(
+                                icon: Icon(Icons.check),
+                                onPressed: () {
+                                  //HAVE TO ADD FUNCTION
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const MyHomePage()),
+                                  );
+                                }),
+                            IconButton(
+                                icon: Icon(Icons.close),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                })
+                          ],
+                        ));
+                //HAVE TO ADD FUNCTION
+              },
+              child: const Text('Terminate')),
+        ),
+      ])),
+    );
+  }
+}
+
+/*Future<http.Response> addNewBus(String bus_type, List<Float> geo_code){
+  return http.post(
+    Uri.parse('https:/????/send.driver.geocode()'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{
+      'title': title,
+    }),
+    );
+}*/

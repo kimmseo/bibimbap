@@ -69,14 +69,14 @@ class _MyHomePageState extends State<MyHomePage> {
           style: raisedButtonStyle,
           icon: const Icon(Icons.add_location),
           onPressed: () async {
-            if (await Permission.contacts.request().isGranted) {
+            if (await Permission.locationWhenInUse.request().isGranted) {
               // Either the permission was already granted before or the user just granted it.
             }
 
             // You can request multiple permissions at once.
             Map<Permission, PermissionStatus> statuses =
-                await [Permission.location].request();
-            print(statuses[Permission.location]);
+                await [Permission.locationWhenInUse].request();
+            print(statuses[Permission.locationWhenInUse]);
           },
           label: const Text('Click here to grant Location permissions'),
         ),

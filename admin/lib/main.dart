@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 import 'dart:core';
 //import 'package:android_intent_plus/android_intent.dart';
 //import 'package:android_intent_plus/flag.dart';
+import 'package:http/http.dart';
 
 void main() {
   runApp(const MyApp());
@@ -44,10 +46,21 @@ class _MyHomePageState extends State<MyHomePage> {
     );
     return Scaffold(
       appBar: AppBar(
-        title: Text(''),
+        title: Text('NTUBUS Admin'),
       ),
-      body: Center(
-        child: ElevatedButton.icon(
+      body: Center(child:Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(height:120),
+          Icon(
+            Icons.location_on,
+            color: Colors.black,
+            size: 150.0,
+          ),
+          SizedBox(height:20),
+          Text("This Application requires \n access to location", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25), textAlign: TextAlign.center),
+          SizedBox(height:15),
+          ElevatedButton.icon(
           style: raisedButtonStyle,
           icon: const Icon(Icons.add_location),
           onPressed: () async {
@@ -65,13 +78,14 @@ class _MyHomePageState extends State<MyHomePage> {
                   context,
                   MaterialPageRoute(
                       builder: ((context) => (PinCodeVerificationScreen()))));
-            }
-            ;
+            };
           },
-          label: const Text('Click here to grant Location permissions'),
+          label: const Text('Grant Location permissions'),
         ),
+        ]
       ),
-    );
+    ),
+  );
   }
 }
 
@@ -89,27 +103,35 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
     bool match = false;
     return Scaffold(
         appBar: AppBar(
-          title: Text('Enter Pin Code received from your company'),
+          title: Text('NTUBUS Admin'),
           automaticallyImplyLeading: false,
         ),
         body: Center(
             child: Column(
           children: [
+            SizedBox(height:80),
+            Text("Enter Pin Code", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
+            SizedBox(height:20),
             PinCodeTextField(
               appContext: context,
               length: 6,
               obscureText: false,
               animationType: AnimationType.fade,
+              keyboardType: TextInputType.number,
               pinTheme: PinTheme(
                 shape: PinCodeFieldShape.box,
                 borderRadius: BorderRadius.circular(5),
-                fieldHeight: 50,
-                fieldWidth: 40,
+                fieldHeight: 60,
+                fieldWidth: 45,
+                inactiveColor: Colors.grey,
+                inactiveFillColor: Colors.white,
+                activeColor: Colors.black,
                 activeFillColor: Colors.white,
+                fieldOuterPadding: EdgeInsets.fromLTRB(11, 5, 11, 5),
               ),
               animationDuration: Duration(milliseconds: 300),
-              backgroundColor: Colors.blue.shade50,
-              enableActiveFill: true,
+              backgroundColor: Colors.white,
+              enableActiveFill: false,
               controller: textEditingController,
               onCompleted: (v) {
                 print("Completed");
@@ -248,7 +270,8 @@ class _BusSelectionPage extends State<BusSelectionPage> {
   // List of items in our dropdown menu
   var items = [
     'Red',
-    'Red Express(Morning)',
+    'Red Express(Morning 1)',
+    'Red Express(Morning 2)',
     'Red Express(Lunch)',
     'Blue',
     'Blue Express(Morning)',
